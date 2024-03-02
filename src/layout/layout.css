@@ -1,0 +1,32 @@
+.layoutModel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+}
+
+.mainSection {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+}
+.sideBarSection {
+  height: 80vh;
+  overflow: scroll;
+  padding-right: 15px;
+  scroll-behavior: smooth;
+}
+
+.sideBarSection::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.sideBarSection {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.contentSection {
+  height: 80vh;
+  overflow: scroll;
+}

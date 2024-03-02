@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.roundedIcons {
+  @apply rounded-full border p-2 border-greyBorder;
+}
