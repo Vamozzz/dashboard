@@ -1,5 +1,7 @@
 //general purpose
 import { ReactComponent as ArrowIcon } from "../assets/images/arrow-down-left.svg";
+import { ReactComponent as GreenUpArrow } from "../assets/images/GREENUPARROW.svg";
+import { ReactComponent as RedDownArrow } from "../assets/images/REDDOWNARROW.svg";
 
 // nav bar icons
 
@@ -35,6 +37,8 @@ import { ReactComponent as SendMoneyCard } from "../assets/images/sendmoney.svg"
 
 export const CommonIcons = {
   ArrowIcon,
+  GreenUpArrow,
+  RedDownArrow,
 };
 
 export const navBarIcons = {
