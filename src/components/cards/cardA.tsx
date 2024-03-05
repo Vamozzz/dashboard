@@ -1,35 +1,45 @@
-import React from "react";
+import React, { FC } from "react";
 import "../cards/cards.css";
-import { CardAIcons } from "../../constants/imageConstans.tsx";
+import { CardInfoCardA } from "../../types/homeTypes";
 
-function CardA() {
-  const cardData = {
-    id: "2",
-    title: "Wallet Balance",
-    amount: "₹80,650",
-    image1: CardAIcons?.AddWallet,
-    // image1: "",
-
-    desc: "Add Balance",
-    // desc: "",
-
-    image2: CardAIcons?.Wallet,
-  };
-
+const CardAComponent: FC<CardInfoCardA> = ({
+  type,
+  title,
+  amount,
+  Image1,
+  desc,
+  Image2,
+  Image1Fill,
+  Image2Fill,
+  bgColor,
+  strokeColor,
+  bgImage,
+}) => {
   return (
-    <div className="cardAContainer text-textColor-textBlack p-6">
-      <p className="text-[20px] font-bold ">{cardData?.title}</p>
-      <p className="text-[32px] font-bold ">{cardData?.amount}</p>
+    // <div
+    //   className={`cardA text-textColor-textBlack p-3 bg border-2 ${`border - [${strokeColor}] bg-[${bgColor}] bg-[${bgImage}]`}`}
+    // >
+    <div
+      className={`cardA text-textColor-textBlack p-3 bg border ${
+        type === "settlement" ? "cardASettlement" : "cardAWallet"
+      }`}
+    >
+      <p className="text-[20px] font-bold ">{title}</p>
+      <p className="text-[32px] font-bold ">{amount}</p>
       <div className="flex justify-between items-center">
         <div className="flex justify-between items-center">
-          {cardData?.image1 && <cardData.image1 />}
-          <p>{cardData?.desc && cardData?.desc}</p>
+          {Image1 && <Image1 style={{ height: 50, width: 50 }} />}
+          <p>{desc}</p>
         </div>
-
-        <cardData.image2 />
+        {Image2 && (
+          <Image2
+            color={Image2Fill && Image2Fill}
+            style={{ height: 30, width: 30 }}
+          />
+        )}
       </div>
     </div>
   );
-}
+};
 
-export default CardA;
+export default CardAComponent;

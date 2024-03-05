@@ -25,7 +25,24 @@ module.exports = {
         redSec: "#FF4848",
       },
     },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "settlementBg-cardA":
+          "url('/src/assets/images/backgroundImages/settlementBgCardA.svg')",
+        "walletBalenceBg-cardA":
+          "url('/src/assets/images/backgroundImages/walletbalanceBgCardA.svg')",
+        "quicksendlinksBg-CardB":
+          "url('/src/assets/images/backgroundImages/quicksendlinksBgCardB.svg')",
+        "payinBg-cardC":
+          "url('/src/assets/images/backgroundImages/payinBgCardC.svg')",
+        "payoutBg-cardC":
+          "url('/src/assets/images/backgroundImages/payoutBgCardC.svg')",
+        "totalSettlementsBg-cardC":
+          "url('/src/assets/images/backgroundImages/totalSettlementsBgCardC.svg')",
+        "totalRefundBg-cardC":
+          "url('/src/assets/images/backgroundImages/totalRefundBgCardC.svg')",
+      },
+    },
   },
   plugins: [],
 };

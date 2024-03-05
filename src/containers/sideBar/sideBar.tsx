@@ -5,15 +5,15 @@ import "./sideBar.css";
 
 const SideBar = () => {
   const [isOpen, setOpen] = useState(true);
-  const { Avatar, Sidebarshrink } = navBarIcons;
+  const { AvatarCommonIcon, ToggleSidebarIcon } = navBarIcons;
   return (
     <nav
-      className={`relative hidden lg:block  ${
+      className={`relative ${
         isOpen ? "w-[240px]" : "w-[70px]"
       } rounded-lg border-2 border-greyBorder animateSideBar `}
     >
-      <div className="h-[164px] w-full flex flex-col items-center p-4">
-        <Avatar style={{ height: 60, width: 60 }} />
+      <div className="h-[164px] w-full flex flex-col items-center p-4 overflow-hidden">
+        <AvatarCommonIcon style={{ height: 60, width: 60 }} />
         <div className={`animateSideBar ${isOpen ? " " : "opacity-0"} `}>
           <div className="font-semibold text-[18px] text-center text-textColor-textBlack text-nowrap">
             <p>Vaamoz Online</p>
@@ -24,14 +24,15 @@ const SideBar = () => {
         </div>
       </div>
       <div
-        className={`flex flex-col  gap-4  py-4 items-start
+        className={`flex flex-col items-start overflow-hidden my-4
         } `}
       >
+        {/* gap-4  py-4 */}
         {navConstants.map((item) => (
           <div
             key={item.id}
-            className={`w-full ${
-              isOpen ? "rounded-3xl px-5" : "rounded-full"
+            className={`w-full py-2 ${
+              isOpen ? "rounded-3xl px-5" : "rounded-full w-[60%]  mx-auto"
             }  ${item.isLink ? "hover:bg-[#EBEBFF] cursor-pointer" : ""} `}
           >
             <div
@@ -65,7 +66,7 @@ const SideBar = () => {
           setOpen(!isOpen);
         }}
       >
-        <Sidebarshrink />
+        <ToggleSidebarIcon isOpen={isOpen} />
       </button>
     </nav>
   );

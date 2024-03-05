@@ -1,0 +1,23 @@
+.homePageContainer {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  gap: 15px;
+}
+
+.firstRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 15px;
+}
+
+.secondRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.thirdRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}

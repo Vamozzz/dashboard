@@ -1,12 +1,17 @@
 .layoutModel {
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 10px;
+  gap: 20px;
 }
 
 .mainSection {
   display: grid;
   grid-template-columns: auto 1fr;
+  gap: 10px;
+}
+
+.mainSectionMObile {
+  display: grid;
   gap: 10px;
 }
 .sideBarSection {

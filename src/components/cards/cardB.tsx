@@ -1,26 +1,19 @@
-import React from "react";
+import React, { FC } from "react";
 import "../cards/cards.css";
-import { CardBIcons, CommonIcons } from "../../constants/imageConstans.tsx";
+import { CardInfoCardB } from "../../types/homeTypes";
 
-function CardB() {
-  const cardData = {
-    id: "2",
-    title: "Send Money",
-    image1: CardBIcons?.SendMoneyCard,
-    image2: CardBIcons?.SendMoneyCard,
-  };
-
+const CardBComponent: FC<CardInfoCardB> = ({ title, Image1, Image2 }) => {
   return (
-    <div className="cardBContainer relative flex justify-center items-center p-6 ">
+    <div className="cardB relative flex justify-center items-center p-2">
       <div className="flex flex-col w-full justify-center items-center font-semibold text-white text-[14px]">
-        <cardData.image2 style={{ height: 50, width: 50 }} />
-        <p>{cardData?.title}</p>
+        {Image1 && <Image1 style={{ height: 50, width: 50 }} />}
+        <p>{title}</p>
       </div>
       <div className="absolute top-4 right-4 cardBContainerImageBorder rounded-full ">
-        <CommonIcons.ArrowIcon style={{ height: 30, width: 30 }} />
+        {Image2 && <Image2 style={{ height: 30, width: 30 }} />}
       </div>
     </div>
   );
-}
+};
 
-export default CardB;
+export default CardBComponent;

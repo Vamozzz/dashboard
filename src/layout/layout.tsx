@@ -9,8 +9,8 @@ const Layout = ({ children }) => {
       <div className="">
         <HeaderBar />
       </div>
-      <div className="mainSection">
-        <div className=" sideBarSection">
+      <div className="mainSection ">
+        <div className=" sideBarSection  hidden lg:block ">
           <SideBar />
         </div>
         <div className="contentSection">{children}</div>

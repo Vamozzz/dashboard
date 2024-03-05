@@ -1,17 +1,33 @@
-.cardAContainer {
-  background-image: url("../../assets/images/settlementBg.svg");
-  background-repeat: repeat;
+.cardA {
+  background-repeat: repeat-x;
   object-fit: fill;
-  width: 100%;
   border-radius: 25px;
-  /* background-color: #F5D8D0; */
-  background-color: #faeae6;
+  /* height: 173px;
+  max-width: 323px; */
+  background-position: center;
 }
 
-.cardBContainer {
+.cardASettlement {
+  background-image: url(../../assets/images/backgroundImages/settlementBgCardA.svg);
+  background-color: #faeae6;
+  border-color: #f8d5cb;
+}
+
+.cardAWallet {
+  background-image: url(../../assets/images/backgroundImages/walletbalanceBgCardA.svg);
+  background-color: #f9e3ec;
+  border-color: #fcd3e4;
+}
+
+.cardB {
   background: linear-gradient(to right, #7072ff, #25279d);
   width: 30%;
   border-radius: 25px;
+  background-repeat: repeat;
+  object-fit: fill;
+  border: 5px solid #e8e8e8;
+  box-shadow: 0 0 10px 5px white;
+  /* box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.7); */
 }
 
 /* .cardBContainerImageBorder {
@@ -28,12 +44,28 @@
   border-radius: 100px;
 }
 
-.cardCContainer {
-  background-image: url("../../assets/images/settlementBg.svg");
+.cardC {
   background-repeat: repeat;
   object-fit: fill;
-  width: 100%;
   border-radius: 25px;
-  /* background-color: #F5D8D0; */
-  background-color: #faeae6;
+  background-position: center;
+}
+
+.cardCPayin {
+  background-image: url("../../assets/images/backgroundImages/payinBgCardC.svg");
+}
+.cardCPayout {
+  background-image: url("../../assets/images/backgroundImages//payoutBgCardC.svg");
+}
+
+.cardCSettleMent {
+  background-image: url("../../assets/images/backgroundImages/totalSettlementsBgCardC.svg");
+}
+
+.cardCPayinRefund {
+  background-image: url("../../assets/images/backgroundImages/totalRefundBgCardC.svg");
+}
+
+.cardD {
+  border-radius: 30px;
 }
