@@ -6,7 +6,8 @@ import { ReactComponent as AvatarCommonIcon } from "../assets/images/MERCHANT.sv
 
 //login icons
 
-import { ReactComponent as LoginSideImage } from "../assets/images/LOGIN&SIGNUP.svg";
+import loginImage from "../assets/images/LOGIN&SIGNUP.svg";
+
 
 //navbar icons
 
@@ -61,7 +62,7 @@ export const CommonIcons = {
 // login icons export
 
 export const loginIcons = {
-  LoginSideImage,
+  loginImage,
 };
 
 // navbar icons export

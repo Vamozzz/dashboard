@@ -13,6 +13,7 @@ module.exports = {
       white: "#FFFFFF",
       black: "#000000",
       mainColor: "#6C54FF",
+      mainLight: "#8875FF",
       greyBorder: "#F2F2F2",
       textColor: {
         textSec: "#535353",
