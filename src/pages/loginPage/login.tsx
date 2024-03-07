@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from "react";
 import { headerIcons, loginIcons } from "../../constants/imageConstans.tsx";
 import ButtonComponent from "../../components/button/buttonComponent.tsx";
 import CustomInput from "../../components/customInput/customInput.tsx";
+import getDeviceInfo from "../../helper/deviceInfo.tsx";
 
 interface registrationState {
   first_name: string;
@@ -9,7 +10,6 @@ interface registrationState {
   email: string;
   mobile: string;
   password: string;
-  checked: boolean;
 }
 interface registrationError {
   first_name?: string;
@@ -17,7 +17,6 @@ interface registrationError {
   email?: string;
   mobile?: string;
   password?: string;
-  checked?: string;
 }
 
 interface loginState {
@@ -31,6 +30,7 @@ interface loginError {
 
 function LoginPage() {
   const [hasAccount, setHasAccount] = useState<boolean>(true);
+  const [isAgree, setAgree] = useState<boolean>(false);
   const [credentialError, setCredentialError] = useState<string | null>(null);
   const [loginData, setLoginData] = useState<loginState>({
     email: "",
@@ -46,7 +46,6 @@ function LoginPage() {
     email: "",
     mobile: "",
     password: "",
-    checked: false,
   });
   const [registrationError, setRegistrationError] = useState<registrationError>(
     {
@@ -55,7 +54,6 @@ function LoginPage() {
       email: "",
       mobile: "",
       password: "",
-      checked: "",
     }
   );
 
@@ -115,11 +113,6 @@ function LoginPage() {
       isValid = false;
     }
 
-    if (!registrationData.checked) {
-      newErrors.checked = "Kindly agree for further action";
-      isValid = false;
-    }
-
     setRegistrationError(newErrors);
     return isValid;
   };
@@ -153,15 +146,18 @@ function LoginPage() {
 
     if (validationRegistrationForm()) {
       try {
-        const response = await fetch("https://api.vampay.in/Webapp/Contactus", {
-          method: "POST",
-          body: JSON.stringify(registrationData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://staging.vaamoz.com/App/Registration",
+          {
+            method: "POST",
+            body: JSON.stringify(registrationData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data = await response.json();
-        // console.log(data, "response data");
+        console.log(data, "response data");
         if (data.status === true) {
           setCredentialError(data.message);
           setRegistrationData({
@@ -170,7 +166,6 @@ function LoginPage() {
             email: "",
             mobile: "",
             password: "",
-            checked: false,
           });
         }
       } catch (error) {
@@ -186,13 +181,16 @@ function LoginPage() {
 
     if (validationLoginForm()) {
       try {
-        const response = await fetch("https://api.vampay.in/Webapp/Contactus", {
-          method: "POST",
-          body: JSON.stringify(registrationData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://staging.vaamoz.com/App/Registration",
+          {
+            method: "POST",
+            body: JSON.stringify(loginData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data = await response.json();
         // console.log(data, "response data");
         if (data.status === true) {
@@ -210,6 +208,12 @@ function LoginPage() {
     }
   };
 
+  getDeviceInfo();
+ 
+
+  
+  
+  
   return (
     <div className="">
       <div className="flex ] ">
@@ -226,9 +230,9 @@ function LoginPage() {
               )}
             </div>
             <form
-              onSubmit={() => {
-                alert("dfghjk");
-              }}
+              onSubmit={
+                hasAccount ? handleSubmitLogin : handleSubmitRegistration
+              }
             >
               {hasAccount ? (
                 <div>
@@ -326,15 +330,18 @@ function LoginPage() {
                         type="checkbox"
                         id={"check"}
                         name="check"
-                        checked={registrationData?.checked}
-                        onChange={handleRegistrationChange}
-                      />{" "}
-                      Agree the terms and policy
+                        checked={isAgree}
+                        onChange={(e) => {
+                          setAgree(e.target.checked);
+                        }}
+                      />
+                      <span className="ml-2">Agree the terms and policy</span>
                     </label>
-                    <label htmlFor={"check"} className="text-[#EE4B2B]">
+                    {/* <label htmlFor={"check"} className="text-[#EE4B2B]">
                       {registrationError?.checked}
-                    </label>
+                    </label> */}
                     <ButtonComponent
+                      disabled={!isAgree}
                       buttonText="Create New Account"
                       customStyle={{ marginTop: 2, color: "white" }}
                       buttonType="submit"

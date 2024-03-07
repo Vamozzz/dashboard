@@ -5,15 +5,18 @@ interface buttonType {
   onClick?: () => void;
   customStyle?: CSSProperties;
   buttonType?: "button" | "submit" | "reset" | undefined;
+  disabled?: boolean;
 }
 const ButtonComponent: FC<buttonType> = ({
   buttonText,
   onClick,
   customStyle,
   buttonType = "button",
+  disabled = false,
 }) => {
   return (
     <button
+      disabled={disabled}
       type={buttonType}
       onClick={onClick}
       style={customStyle}
