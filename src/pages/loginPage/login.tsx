@@ -1,8 +1,8 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { headerIcons, loginIcons } from "../../constants/imageConstans.tsx";
 import ButtonComponent from "../../components/button/buttonComponent.tsx";
 import CustomInput from "../../components/customInput/customInput.tsx";
-import getDeviceInfo from "../../helper/deviceInfo.tsx";
+import { getDeviceInfo } from "../../helper/deviceInfo.tsx";
 
 interface registrationState {
   first_name: string;
@@ -17,6 +17,7 @@ interface registrationError {
   email?: string;
   mobile?: string;
   password?: string;
+  checked?: string;
 }
 
 interface loginState {
@@ -27,11 +28,31 @@ interface loginError {
   email?: string;
   password?: string;
 }
+interface deviceData {
+  registration_by: string;
+  device_type: string;
+  device_model: string;
+  device_id: string;
+  device_os: string;
+  device_ip: string;
+  longitude: string;
+  latitude: string;
+}
 
 function LoginPage() {
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [isAgree, setAgree] = useState<boolean>(false);
   const [credentialError, setCredentialError] = useState<string | null>(null);
+  const [deviceData, setDeviceData] = useState<deviceData>({
+    registration_by: "web",
+    device_type: " unknown",
+    device_model: "unknown",
+    device_id: "ertyuiojbhg1234567",
+    device_os: "unknown",
+    device_ip: "23.13.25.22",
+    longitude: "69.436",
+    latitude: "28.4567",
+  });
   const [loginData, setLoginData] = useState<loginState>({
     email: "",
     password: "",
@@ -54,8 +75,17 @@ function LoginPage() {
       email: "",
       mobile: "",
       password: "",
+      checked: "",
     }
   );
+
+  useEffect(() => {
+    const fetchUserDevice = async () => {
+      const deviceInfo = await getDeviceInfo();
+      setDeviceData(deviceInfo);
+    };
+    fetchUserDevice();
+  }, []);
 
   const handleRegistrationChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event?.target;
@@ -84,6 +114,10 @@ function LoginPage() {
   const validationRegistrationForm = (): boolean => {
     let isValid = true;
     const newErrors: registrationError = {};
+    if (!isAgree) {
+      newErrors.checked = "Kindly accept the terms and conditions";
+      isValid = false;
+    }
 
     if (!registrationData.first_name.trim()) {
       newErrors.first_name = "First Name is required";
@@ -110,6 +144,18 @@ function LoginPage() {
       !contactRegex.test(registrationData.mobile)
     ) {
       newErrors.mobile = "Enter valid contact";
+      isValid = false;
+    }
+
+    const passwordRegex =
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (
+      !registrationData?.password?.trim() ||
+      passwordRegex.test(registrationData.password)
+    ) {
+      console.log(passwordRegex.test(registrationData.password), "hjkl");
+      newErrors.password =
+        "Password must be at least 8 characters long and contain at least one capital alphabet, one small alphabet, one digit, and one special character from @$!%*?&.";
       isValid = false;
     }
 
@@ -146,16 +192,14 @@ function LoginPage() {
 
     if (validationRegistrationForm()) {
       try {
-        const response = await fetch(
-          "https://staging.vaamoz.com/App/Registration",
-          {
-            method: "POST",
-            body: JSON.stringify(registrationData),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch("https://vampay.in/App/Registration", {
+          method: "POST",
+          body: JSON.stringify({ ...registrationData, ...deviceData }),
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "https://vaamoz.com",
+          },
+        });
         const data = await response.json();
         console.log(data, "response data");
         if (data.status === true) {
@@ -169,6 +213,7 @@ function LoginPage() {
           });
         }
       } catch (error) {
+        setCredentialError("Something went wrong!");
         console.log(error);
       }
     } else {
@@ -208,12 +253,6 @@ function LoginPage() {
     }
   };
 
-  getDeviceInfo();
- 
-
-  
-  
-  
   return (
     <div className="">
       <div className="flex ] ">
@@ -283,6 +322,9 @@ function LoginPage() {
                 </div>
               ) : (
                 <div>
+                  <label className="text-[#EE4B2B] p-6">
+                    {credentialError && credentialError}
+                  </label>
                   <div className="flex flex-col gap-2">
                     <CustomInput
                       label={"First Name"}
@@ -310,7 +352,7 @@ function LoginPage() {
                     />
                     <CustomInput
                       label={"Contact"}
-                      htmlFor="contact"
+                      htmlFor="mobile"
                       placeholder="Phone Number"
                       value={registrationData?.mobile}
                       onChange={handleRegistrationChange}
@@ -324,6 +366,7 @@ function LoginPage() {
                       value={registrationData?.password}
                       onChange={handleRegistrationChange}
                       error={registrationError?.password}
+                      // innerHtml={registrationError?.password}
                     />
                     <label htmlFor={"check"}>
                       <input
@@ -337,9 +380,11 @@ function LoginPage() {
                       />
                       <span className="ml-2">Agree the terms and policy</span>
                     </label>
-                    {/* <label htmlFor={"check"} className="text-[#EE4B2B]">
-                      {registrationError?.checked}
-                    </label> */}
+                    {registrationError?.checked && (
+                      <label htmlFor={"check"} className="text-[#EE4B2B]">
+                        {registrationError?.checked}
+                      </label>
+                    )}
                     <ButtonComponent
                       disabled={!isAgree}
                       buttonText="Create New Account"
