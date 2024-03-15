@@ -8,6 +8,7 @@ interface inputType {
   htmlFor?: string;
   placeholder?: string;
   innerHtml?: string;
+  inputType?:string;
 }
 
 const CustomInput: FC<inputType> = ({
@@ -18,6 +19,7 @@ const CustomInput: FC<inputType> = ({
   htmlFor,
   placeholder,
   innerHtml,
+  inputType,
 }) => {
   return (
     <div className="flex flex-col gap-2">
@@ -26,6 +28,7 @@ const CustomInput: FC<inputType> = ({
       </label>
       <input
         value={value}
+        type={inputType}
         name={htmlFor}
         id={htmlFor}
         onChange={onChange}

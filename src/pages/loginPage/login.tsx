@@ -3,6 +3,7 @@ import { headerIcons, loginIcons } from "../../constants/imageConstans.tsx";
 import ButtonComponent from "../../components/button/buttonComponent.tsx";
 import CustomInput from "../../components/customInput/customInput.tsx";
 import { getDeviceInfo } from "../../helper/deviceInfo.tsx";
+import OtpPopup from "../../components/popup/otpPopup.tsx";
 
 interface registrationState {
   first_name: string;
@@ -21,11 +22,11 @@ interface registrationError {
 }
 
 interface loginState {
-  email: string;
+  userid: string;
   password: string;
 }
 interface loginError {
-  email?: string;
+  userid?: string;
   password?: string;
 }
 interface deviceData {
@@ -35,30 +36,37 @@ interface deviceData {
   device_id: string;
   device_os: string;
   device_ip: string;
-  longitude: string;
+  longitudue: string;
   latitude: string;
+}
+interface errorMessage {
+  loginError: string;
+  registrationError: string;
 }
 
 function LoginPage() {
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [isAgree, setAgree] = useState<boolean>(false);
-  const [credentialError, setCredentialError] = useState<string | null>(null);
+  const [credentialError, setCredentialError] = useState<errorMessage>({
+    loginError: "",
+    registrationError: "",
+  });
   const [deviceData, setDeviceData] = useState<deviceData>({
     registration_by: "web",
-    device_type: " unknown",
-    device_model: "unknown",
-    device_id: "ertyuiojbhg1234567",
-    device_os: "unknown",
-    device_ip: "23.13.25.22",
-    longitude: "69.436",
-    latitude: "28.4567",
+    device_type: "",
+    device_model: "",
+    device_id: "",
+    device_os: "",
+    device_ip: "",
+    longitudue: "",
+    latitude: "",
   });
   const [loginData, setLoginData] = useState<loginState>({
-    email: "",
+    userid: "",
     password: "",
   });
   const [loginError, setLoginError] = useState<loginError>({
-    email: "",
+    userid: "",
     password: "",
   });
   const [registrationData, setRegistrationData] = useState<registrationState>({
@@ -151,7 +159,7 @@ function LoginPage() {
       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (
       !registrationData?.password?.trim() ||
-      passwordRegex.test(registrationData.password)
+      !passwordRegex.test(registrationData.password)
     ) {
       console.log(passwordRegex.test(registrationData.password), "hjkl");
       newErrors.password =
@@ -167,17 +175,17 @@ function LoginPage() {
     let isValid = true;
     const newErrors: loginError = {};
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!loginData.email.trim() || !emailRegex.test(loginData.email)) {
-      newErrors.email = "Valid Email is Required ";
-      isValid = false;
-    }
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!loginData.email.trim() || !emailRegex.test(loginData.email)) {
+    //   newErrors.email = "Valid Email is Required ";
+    //   isValid = false;
+    // }
 
     const passwordRegex =
       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (
       !loginData?.password?.trim() ||
-      passwordRegex.test(loginData.password)
+      !passwordRegex.test(loginData.password)
     ) {
       newErrors.password = "Password is invalid";
       isValid = false;
@@ -191,19 +199,26 @@ function LoginPage() {
     e.preventDefault();
 
     if (validationRegistrationForm()) {
+      const body = { ...registrationData, ...deviceData };
       try {
-        const response = await fetch("https://vampay.in/App/Registration", {
-          method: "POST",
-          body: JSON.stringify({ ...registrationData, ...deviceData }),
-          headers: {
-            "Content-Type": "application/json",
-            Origin: "https://vaamoz.com",
-          },
-        });
+        const response = await fetch(
+          "https://vaamoz.com/vampayUserApp/App/Registration",
+          {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+              "Content-Type": "application/json",
+              Origin: "https://vaamoz.com",
+            },
+          }
+        );
         const data = await response.json();
         console.log(data, "response data");
         if (data.status === true) {
-          setCredentialError(data.message);
+          setCredentialError({
+            ...credentialError,
+            registrationError: data.message,
+          });
           setRegistrationData({
             first_name: "",
             last_name: "",
@@ -212,8 +227,17 @@ function LoginPage() {
             password: "",
           });
         }
+        if (data.status === false) {
+          setCredentialError({
+            ...credentialError,
+            registrationError: data.message,
+          });
+        }
       } catch (error) {
-        setCredentialError("Something went wrong!");
+        setCredentialError({
+          ...credentialError,
+          registrationError: error,
+        });
         console.log(error);
       }
     } else {
@@ -227,12 +251,13 @@ function LoginPage() {
     if (validationLoginForm()) {
       try {
         const response = await fetch(
-          "https://staging.vaamoz.com/App/Registration",
+          "https://vaamoz.com/vampayUserApp/App/Login",
           {
             method: "POST",
             body: JSON.stringify(loginData),
             headers: {
               "Content-Type": "application/json",
+              Origin: "https://vaamoz.com",
             },
           }
         );
@@ -241,7 +266,7 @@ function LoginPage() {
         if (data.status === true) {
           setCredentialError(data.message);
           setLoginData({
-            email: "",
+            userid: "",
             password: "",
           });
         }
@@ -254,14 +279,14 @@ function LoginPage() {
   };
 
   return (
-    <div className="">
-      <div className="flex ] ">
+    <div className="relative">
+      <div className="flex flex-col lg:flex-row">
         <img
           src={loginIcons?.loginImage}
-          alt={"dfghj"}
-          className="object-cover w-1/2"
+          alt={"loginBackground"}
+          className="object-cover w-full lg:w-1/2"
         />
-        <div className="flex items-center justify-center w-1/2 bg-[#F1F2F5]">
+        <div className="flex  items-center justify-center w-full lg:w-1/2 py-10 lg:py-0 bg-[#F1F2F5]">
           <div className="w-2/3 p-6 m-auto bg-white rounded-lg">
             <div className="flex items-center justify-center p-4">
               {headerIcons?.WebLogoHeaderIcon && (
@@ -275,17 +300,17 @@ function LoginPage() {
             >
               {hasAccount ? (
                 <div>
-                  <label className="text-[#EE4B2B]">
-                    {credentialError && credentialError}
-                  </label>
+                  <p className="text-[#EE4B2B]">
+                    {credentialError?.loginError}
+                  </p>
                   <div className="flex flex-col gap-2">
                     <CustomInput
-                      label={"Email"}
-                      htmlFor="email"
-                      placeholder="Enter Your Email"
-                      value={loginData?.email}
+                      label={"User ID"}
+                      htmlFor="userid"
+                      placeholder="Enter Your user id"
+                      value={loginData?.userid}
                       onChange={handleLoginChange}
-                      error={loginError?.email}
+                      error={loginError?.userid}
                     />
 
                     <CustomInput
@@ -295,6 +320,7 @@ function LoginPage() {
                       value={loginData?.password}
                       onChange={handleLoginChange}
                       error={loginError?.password}
+                      inputType="password"
                     />
                     <button
                       type="button"
@@ -322,9 +348,9 @@ function LoginPage() {
                 </div>
               ) : (
                 <div>
-                  <label className="text-[#EE4B2B] p-6">
-                    {credentialError && credentialError}
-                  </label>
+                  <p className="text-[#EE4B2B] p-6">
+                    {credentialError.registrationError}
+                  </p>
                   <div className="flex flex-col gap-2">
                     <CustomInput
                       label={"First Name"}
@@ -349,6 +375,7 @@ function LoginPage() {
                       value={registrationData?.email}
                       onChange={handleRegistrationChange}
                       error={registrationError?.email}
+                      inputType="email"
                     />
                     <CustomInput
                       label={"Contact"}
@@ -357,6 +384,7 @@ function LoginPage() {
                       value={registrationData?.mobile}
                       onChange={handleRegistrationChange}
                       error={registrationError?.mobile}
+                      inputType="tel"
                     />
 
                     <CustomInput
@@ -367,6 +395,7 @@ function LoginPage() {
                       onChange={handleRegistrationChange}
                       error={registrationError?.password}
                       // innerHtml={registrationError?.password}
+                      inputType="password"
                     />
                     <label htmlFor={"check"}>
                       <input
@@ -408,6 +437,7 @@ function LoginPage() {
           </div>
         </div>
       </div>
+      {/* <OtpPopup /> */}
     </div>
   );
 }

@@ -8,7 +8,7 @@
 // };
 
 // axios
-//   .post("{{base_url}}App/Registration", data, config)
+//   .post("https://vaamoz.com/vampayUserApp/App/Registration", data, config)
 //   .then((response) => {
 //     console.log("Response:", response.data);
 //   })
